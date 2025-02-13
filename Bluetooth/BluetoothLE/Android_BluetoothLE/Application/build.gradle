@@ -1,0 +1,55 @@
+buildscript {
+    repositories {
+        google()
+        mavenCentral() // Replace deprecated jcenter()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.5.0' // Use only one Gradle version
+    }
+}
+
+apply plugin: 'com.android.application'
+
+repositories {
+    google()
+    mavenCentral() // Replace deprecated jcenter()
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.6.1' // AndroidX replacement
+    implementation 'androidx.cardview:cardview:1.0.0'  // AndroidX replacement
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.4' // Latest constraint layout
+}
+
+// Define sample directories correctly in Groovy
+def dirs = [
+        'main',     // main sample code
+        'common',   // components that are reused
+        'template'  // boilerplate code
+]
+
+android {
+    compileSdkVersion 34 // Updated for Google Play requirements
+
+    defaultConfig {
+        minSdkVersion 18
+        targetSdkVersion 34 // Updated for Google Play
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8 // Use Java 8 for better compatibility
+        targetCompatibility JavaVersion.VERSION_1_8
+    }
+
+    sourceSets {
+        main {
+            dirs.each { dir ->
+                java.srcDirs "src/${dir}/java"
+                res.srcDirs "src/${dir}/res"
+            }
+        }
+        androidTest.setRoot('tests')
+        androidTest.java.srcDirs = ['tests/src']
+    }
+}
