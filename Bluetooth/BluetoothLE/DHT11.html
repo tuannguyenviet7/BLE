@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DHT11 Sensor</title>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #e3f2fd;
+        }
+        .container {
+            margin-top: 50px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            display: inline-block;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        h1 {
+            color: #007bff;
+        }
+        h2 {
+            color: #333;
+        }
+        .data {
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>DHT11 Sensor</h1>
+    <div class="container">
+        <h2>Nhiệt độ: <span id="temperature">--</span> °C</h2>
+        <h2>Độ ẩm: <span id="humidity">--</span> %</h2>
+    </div>
+
+    <script>
+        // 🔥 Cấu hình Firebase
+        var firebaseConfig = {
+            apiKey: "AIzaSyA3o246DuYXOqYMIhqVn_YOXql92H_B-Ls",
+            authDomain: "dht11-gw.firebaseapp.com",
+            databaseURL: "https://dht11-gw-default-rtdb.asia-southeast1.firebasedatabase.app",
+            storageBucket: "dht11-gw.firebasestorage.app",
+        };
+        firebase.initializeApp(firebaseConfig);
+        var database = firebase.database();
+
+        // 📡 Lắng nghe thay đổi từ Firebase
+        database.ref("/sensor_data").on("value", (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const lastEntry = Object.values(data).pop(); // Lấy dữ liệu mới nhất
+                document.getElementById("temperature").innerText = lastEntry.temperature.toFixed(1);
+                document.getElementById("humidity").innerText = lastEntry.humidity.toFixed(1);
+            }
+        });
+    </script>
+</body>
+</html>
